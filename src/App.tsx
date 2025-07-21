@@ -16,6 +16,7 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null)
   const [showLab, setShowLab] = useState(false)
+  const [currentStep, setCurrentStep] = useState<'setup' | 'generate' | 'preview'>('setup')
 
   const [contentRequest, setContentRequest] = useState<ContentRequest>({
     platform: 'linkedin',
@@ -187,6 +188,8 @@ The blueprint is in my bio. But only if you're serious about results. 🚀
 
   const generateContent = async (topic: string) => {
     setIsGenerating(true)
+    setCurrentStep('generate')
+    
     try {
       // Simulate AI content generation with realistic timing
       await new Promise(resolve => setTimeout(resolve, 4000))
@@ -242,11 +245,18 @@ The blueprint is in my bio. But only if you're serious about results. 🚀
       }
       
       setGeneratedContent(mockContent)
+      setCurrentStep('preview')
     } catch (error) {
       console.error('Content generation failed:', error)
+      setCurrentStep('setup')
     } finally {
       setIsGenerating(false)
     }
+  }
+
+  const resetToSetup = () => {
+    setCurrentStep('setup')
+    setGeneratedContent(null)
   }
 
   if (loading) {
@@ -321,16 +331,16 @@ The blueprint is in my bio. But only if you're serious about results. 🚀
       {showLab ? (
         <PersuasionLab onClose={() => setShowLab(false)} />
       ) : (
-        <main className="container mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            {/* Left Column - Controls */}
-            <div className="xl:col-span-1 space-y-6">
-              <div className="stealth-card space-y-6">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-2 h-2 bg-accent rounded-full pulse-accent" />
-                  <h2 className="text-lg font-semibold text-foreground">Neural Configuration</h2>
-                </div>
-                
+        <main className="container mx-auto px-6 py-12 max-w-4xl">
+          {/* Step-by-step flow */}
+          {currentStep === 'setup' && (
+            <div className="space-y-8">
+              <div className="text-center space-y-4">
+                <h2 className="text-3xl font-bold gradient-text">Create Persuasive Content</h2>
+                <p className="text-muted-foreground text-lg">Configure your content strategy in simple steps</p>
+              </div>
+
+              <div className="space-y-8">
                 <PlatformSelector
                   selectedPlatform={contentRequest.platform}
                   onPlatformChange={(platform) => 
@@ -359,23 +369,52 @@ The blueprint is in my bio. But only if you're serious about results. 🚀
                     setContentRequest(prev => ({ ...prev, contentType }))
                   }
                 />
+                
+                <ContentGenerator
+                  contentRequest={contentRequest}
+                  onGenerate={generateContent}
+                  isGenerating={isGenerating}
+                />
+              </div>
+            </div>
+          )}
+
+          {currentStep === 'generate' && (
+            <div className="flex items-center justify-center min-h-[60vh]">
+              <div className="text-center space-y-6">
+                <div className="relative">
+                  <div className="w-20 h-20 bg-gradient-to-r from-accent to-purple-500 rounded-full animate-pulse mx-auto neural-glow" />
+                  <div className="absolute inset-0 w-20 h-20 border-2 border-accent/30 rounded-full animate-spin mx-auto" />
+                </div>
+                <div className="space-y-2">
+                  <div className="text-2xl font-semibold gradient-text">Crafting Persuasion...</div>
+                  <div className="text-muted-foreground">Applying psychological triggers and cultural intelligence</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 'preview' && generatedContent && (
+            <div className="space-y-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold gradient-text">Generated Content</h2>
+                  <p className="text-muted-foreground">Your psychologically-optimized content is ready</p>
+                </div>
+                <button
+                  onClick={resetToSetup}
+                  className="px-4 py-2 comet-button-secondary rounded-lg text-sm"
+                >
+                  Create New
+                </button>
               </div>
               
-              <ContentGenerator
-                contentRequest={contentRequest}
-                onGenerate={generateContent}
-                isGenerating={isGenerating}
-              />
-            </div>
-            
-            {/* Right Column - Preview */}
-            <div className="xl:col-span-2 space-y-6">
               <ContentPreview
                 content={generatedContent}
-                isGenerating={isGenerating}
+                isGenerating={false}
               />
             </div>
-          </div>
+          )}
         </main>
       )}
     </div>

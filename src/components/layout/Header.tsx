@@ -1,4 +1,4 @@
-import { Brain, Zap, Target, Beaker, User } from 'lucide-react'
+import { Brain, Beaker, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { blink } from '@/blink/client'
 
@@ -21,31 +21,12 @@ export function Header({ onLabToggle }: HeaderProps) {
                 Covert Persuasion Engine
               </h1>
               <p className="text-xs text-muted-foreground">
-                Psychological Content Intelligence • V.D.A. Protocol
+                Psychological Content Intelligence
               </p>
             </div>
           </div>
           
           <div className="flex items-center space-x-4">
-            {/* Status indicators */}
-            <div className="hidden lg:flex items-center space-x-6">
-              <div className="flex items-center space-x-2 text-sm">
-                <Zap className="h-4 w-4 text-accent neural-pulse" />
-                <span className="text-muted-foreground">Neural Active</span>
-              </div>
-              
-              <div className="flex items-center space-x-2 text-sm">
-                <Target className="h-4 w-4 text-green-400" />
-                <span className="text-muted-foreground">Stealth Mode</span>
-              </div>
-              
-              <div className="flex items-center space-x-2 text-sm">
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                <span className="text-muted-foreground">Conversion Ready</span>
-              </div>
-            </div>
-            
-            {/* Action buttons */}
             <Button 
               variant="outline" 
               size="sm" 

@@ -1,8 +1,5 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Globe, MapPin, Blend } from 'lucide-react'
+import { Globe, MapPin, Zap } from 'lucide-react'
 
 interface CulturalToggleProps {
   selectedContext: 'indian' | 'global' | 'hybrid'
@@ -13,44 +10,32 @@ export function CulturalToggle({ selectedContext, onContextChange }: CulturalTog
   const contexts = [
     {
       id: 'indian' as const,
-      name: 'Indian Context',
+      name: 'Indian',
       icon: MapPin,
-      description: 'Authentic cultural markers',
-      examples: ['Festival wisdom', 'Family values', 'Startup culture'],
-      color: 'text-orange-400',
-      bgColor: 'bg-orange-400/10 border-orange-400/30'
+      description: 'Local cultural references',
+      color: 'text-orange-400'
     },
     {
       id: 'global' as const,
-      name: 'Global Appeal',
+      name: 'Global',
       icon: Globe,
-      description: 'Universal principles',
-      examples: ['Cross-cultural success', 'Universal emotions', 'Global trends'],
-      color: 'text-blue-400',
-      bgColor: 'bg-blue-400/10 border-blue-400/30'
+      description: 'Universal appeal',
+      color: 'text-blue-400'
     },
     {
       id: 'hybrid' as const,
-      name: 'Hybrid Bridge',
-      icon: Blend,
+      name: 'Hybrid',
+      icon: Zap,
       description: 'Best of both worlds',
-      examples: ['Local stories, global lessons', 'Cultural bridges', 'Universal relatability'],
-      color: 'text-purple-400',
-      bgColor: 'bg-purple-400/10 border-purple-400/30'
+      color: 'text-purple-400'
     }
   ]
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center space-x-2">
-        <Globe className="h-5 w-5 text-accent" />
-        <h3 className="text-lg font-medium">Cultural Intelligence</h3>
-        <Badge variant="outline" className="text-xs border-accent/30 text-accent">
-          Authenticity Engine
-        </Badge>
-      </div>
+      <h3 className="text-lg font-semibold text-foreground">Cultural Context</h3>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-3">
         {contexts.map((context) => {
           const Icon = context.icon
           const isSelected = selectedContext === context.id
@@ -58,32 +43,18 @@ export function CulturalToggle({ selectedContext, onContextChange }: CulturalTog
           return (
             <Card
               key={context.id}
-              className={`p-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
-                isSelected 
-                  ? `${context.bgColor} neural-glow` 
-                  : 'stealth-card hover:bg-card/70'
+              className={`p-4 cursor-pointer transition-all duration-200 ${
+                isSelected
+                  ? 'stealth-card border-accent/50 neural-glow'
+                  : 'stealth-card hover:border-accent/30'
               }`}
               onClick={() => onContextChange(context.id)}
             >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Icon className={`h-5 w-5 ${isSelected ? context.color : 'text-muted-foreground'}`} />
-                    <h4 className="font-medium text-sm">{context.name}</h4>
-                  </div>
-                  {isSelected && (
-                    <div className="w-2 h-2 bg-accent rounded-full pulse-accent" />
-                  )}
-                </div>
-                
-                <p className="text-xs text-muted-foreground">{context.description}</p>
-                
-                <div className="space-y-1">
-                  {context.examples.map((example) => (
-                    <div key={example} className="text-xs text-muted-foreground/80">
-                      • {example}
-                    </div>
-                  ))}
+              <div className="text-center space-y-2">
+                <Icon className={`h-6 w-6 mx-auto ${isSelected ? 'text-accent' : context.color}`} />
+                <div>
+                  <div className="font-medium text-foreground text-sm">{context.name}</div>
+                  <div className="text-xs text-muted-foreground">{context.description}</div>
                 </div>
               </div>
             </Card>
